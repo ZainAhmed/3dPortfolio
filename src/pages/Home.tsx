@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import Loader from "../components/Loader";
+import Bird from "../models/Bird";
 import Island from "../models/Island";
 import Sky from "../models/Sky";
 import { adjustIslandForScreenSize } from "../utils/utils";
@@ -26,6 +27,7 @@ function Home() {
             rotation={islandRotation}
           />
           <Sky />
+          <Bird />
         </Suspense>
       </Canvas>
     </section>
