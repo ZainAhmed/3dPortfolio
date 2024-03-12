@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Loader from "../components/Loader";
 import Bird from "../models/Bird";
 import Island from "../models/Island";
+import Plane from "../models/Plane";
 import Sky from "../models/Sky";
 import { adjustIslandForScreenSize } from "../utils/utils";
 
@@ -28,6 +29,7 @@ function Home() {
           />
           <Sky />
           <Bird />
+          <Plane />
         </Suspense>
       </Canvas>
     </section>
