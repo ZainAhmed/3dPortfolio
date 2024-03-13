@@ -7,7 +7,8 @@ import Plane from "../models/Plane";
 import Sky from "../models/Sky";
 
 function Home() {
-  const [isRotating, setRotating] = useState(false);
+  const [isRotating, setIsRotating] = useState(false);
+  const [isIslandRotating, setIsIslandRotating] = useState(false);
   return (
     <section
       className={`w-full h-screen relative ${
@@ -20,14 +21,20 @@ function Home() {
       >
         <Suspense fallback={<Loader />}>
           <directionalLight position={[1, 1, 1]} intensity={2} />
-          <ambientLight intensity={2} />
-          <pointLight />
-          <spotLight />
-          <hemisphereLight />
-          <Island isRotating={isRotating} setRotating={setRotating} />
+          <ambientLight intensity={0.5} />
+          <hemisphereLight
+            skyColor="#b1e1ff"
+            groundColor="#000000"
+            intensity={1}
+          />
+          <Island
+            isRotating={isRotating}
+            setIsRotating={setIsRotating}
+            setIsIslandRotating={setIsIslandRotating}
+          />
           <Sky />
           <Bird />
-          <Plane />
+          <Plane isRotating={isIslandRotating} />
         </Suspense>
       </Canvas>
     </section>
