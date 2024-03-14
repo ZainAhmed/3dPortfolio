@@ -8,7 +8,7 @@ import Sky from "../models/Sky";
 
 function Home() {
   const [isRotating, setIsRotating] = useState(false);
-  const [isIslandRotating, setIsIslandRotating] = useState(false);
+  const [rotationSpeed, setRotationSpeed] = useState(0);
   return (
     <section
       className={`w-full h-screen relative ${
@@ -30,11 +30,12 @@ function Home() {
           <Island
             isRotating={isRotating}
             setIsRotating={setIsRotating}
-            setIsIslandRotating={setIsIslandRotating}
+            rotationSpeed={rotationSpeed}
+            setRotationSpeed={setRotationSpeed}
           />
           <Sky />
           <Bird />
-          <Plane isRotating={isIslandRotating} />
+          <Plane rotationSpeed={rotationSpeed} isRotating={isRotating} />
         </Suspense>
       </Canvas>
     </section>
