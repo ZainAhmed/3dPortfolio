@@ -1,10 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { a } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+} from "react";
+import { Group, Object3DEventMap } from "three";
 import islandScene from "../assets/3d/island.glb";
 import { adjustIslandForScreenSize } from "../utils/utils";
-
 type PropsType = {
   isRotating: boolean;
   setIsRotating: Dispatch<SetStateAction<boolean>>;
@@ -19,18 +26,17 @@ function Island({
 }: PropsType) {
   const [scale, position, rotation] = adjustIslandForScreenSize();
   const { nodes, materials } = useGLTF(islandScene);
-  const [, setStillRotating] = useState(false);
-  const { gl, viewport } = useThree();
+  const { viewport } = useThree();
   const lastX = useRef(0);
   const dampingFactor = 0.87;
-  const islandRef = useRef();
+  const islandRef: MutableRefObject<Group<Object3DEventMap> | null> =
+    useRef<Group<Object3DEventMap>>(null);
 
-  const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+  const handlePointerDown = (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
     setIsRotating(true);
-    setStillRotating(true);
-    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientX = event.clientX;
 
     lastX.current = clientX;
   };
@@ -41,62 +47,36 @@ function Island({
     setIsRotating(false);
   };
 
-  const handlePointerMove = (event: MouseEvent | TouchEvent) => {
+  const handlePointerMove = (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
     if (isRotating) {
       // If rotation is enabled, calculate the change in clientX position
-      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+      const clientX = event.clientX;
 
       // calculate the change in the horizontal position of the mouse cursor or touch input,
       // relative to the viewport's width
       const delta = (clientX - lastX.current) / viewport.width;
       // Update the island's rotation based on the mouse/touch movement
-      islandRef.current.rotation.y += delta * 0.01 * Math.PI;
+      if (islandRef.current)
+        islandRef.current.rotation.y += delta * 0.01 * Math.PI;
       // Update the reference for the last clientX position
       lastX.current = clientX;
       setRotationSpeed(delta * 0.01 * Math.PI);
     }
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft") {
-      if (!isRotating) {
-        setIsRotating(true);
-        setStillRotating(true);
-        islandRef.current.rotation.y += 0.005 * Math.PI;
-        setRotationSpeed(0.007);
-      }
-    } else if (event.key === "ArrowRight") {
-      if (!isRotating) {
-        setIsRotating(true);
-        setStillRotating(true);
-        islandRef.current.rotation.y -= 0.005 * Math.PI;
-        setRotationSpeed(0.007);
-      }
-    }
-  };
-
-  const handleKeyUp = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-      setIsRotating(false);
-    }
-  };
   useEffect(() => {
     window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("pointerup", handlePointerUp);
     window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
 
     return () => {
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [gl, handlePointerMove]);
+  }, [handlePointerMove, handlePointerDown, handlePointerUp]);
 
   // This function is called on each frame update
   useFrame(() => {
@@ -107,7 +87,7 @@ function Island({
       if (Math.abs(rotationSpeed) < 0.01) {
         setRotationSpeed(0);
       }
-      islandRef.current.rotation.y += rotationSpeed;
+      if (islandRef.current) islandRef.current.rotation.y += rotationSpeed;
     }
   });
 
