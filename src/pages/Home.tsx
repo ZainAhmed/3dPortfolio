@@ -9,6 +9,8 @@ import Sky from "../models/Sky";
 function Home() {
   const [isRotating, setIsRotating] = useState(false);
   const [rotationSpeed, setRotationSpeed] = useState(0);
+  const [currentStage, setCurrentStage] = useState(0);
+  setCurrentStage;
   return (
     <section
       className={`w-full h-screen relative ${
@@ -32,6 +34,7 @@ function Home() {
             setIsRotating={setIsRotating}
             rotationSpeed={rotationSpeed}
             setRotationSpeed={setRotationSpeed}
+            setCurrentStage={setCurrentStage}
           />
           <Sky />
           <Bird />
