@@ -1,16 +1,11 @@
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useState } from "react";
 import Loader from "../components/Loader";
-import Bird from "../models/Bird";
-import Island from "../models/Island";
-import Plane from "../models/Plane";
-import Sky from "../models/Sky";
+import Models from "../components/Models";
 
 function Home() {
   const [isRotating, setIsRotating] = useState(false);
-  const [rotationSpeed, setRotationSpeed] = useState(0);
-  const [currentStage, setCurrentStage] = useState(0);
-  setCurrentStage;
+
   return (
     <section
       className={`w-full h-screen relative ${
@@ -29,16 +24,7 @@ function Home() {
             groundColor="#000000"
             intensity={1}
           />
-          <Island
-            isRotating={isRotating}
-            setIsRotating={setIsRotating}
-            rotationSpeed={rotationSpeed}
-            setRotationSpeed={setRotationSpeed}
-            setCurrentStage={setCurrentStage}
-          />
-          <Sky />
-          <Bird />
-          <Plane rotationSpeed={rotationSpeed} isRotating={isRotating} />
+          <Models isRotating={isRotating} setIsRotating={setIsRotating} />
         </Suspense>
       </Canvas>
     </section>
