@@ -99,7 +99,7 @@ function Models({ isRotating, setIsRotating }: PropsType) {
         islandRef.current.rotation.y += delta * 0.01 * Math.PI;
       }
       if (skyRef.current) {
-        skyRef.current.rotation.y += delta * 0.01 * Math.PI;
+        skyRef.current.rotation.y += delta * 0.01 * Math.PI * 0.5;
       }
       // Update the reference for the last clientX position
       if (planeRef.current) {
@@ -134,7 +134,7 @@ function Models({ isRotating, setIsRotating }: PropsType) {
         setRotationSpeed(0);
       }
       if (islandRef.current) islandRef.current.rotation.y += rotationSpeed;
-      if (skyRef.current) skyRef.current.rotation.y += rotationSpeed;
+      if (skyRef.current) skyRef.current.rotation.y += rotationSpeed * 0.5;
 
       if (planeRef.current) {
         updateSwipteOffset(rotationSpeed);
