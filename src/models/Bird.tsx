@@ -17,7 +17,8 @@ function Bird() {
   useFrame((state, delta) => {
     const radius = 30; // Radius of the circular path
     const speed = 2; // Speed of the rotation
-    const arcLength = state.clock.getElapsedTime() * speed; // Angle based on time
+    const arcLength =
+      (state.clock.getElapsedTime() * speed) % (Math.PI * 2 * radius); // Angle based on time
     const theta = arcLength / radius;
 
     // Calculate the position of the bird along the circular path
