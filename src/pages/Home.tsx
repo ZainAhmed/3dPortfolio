@@ -2,6 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useState } from "react";
 import Loader from "../components/Loader";
 import Models from "../components/Models";
+import ZoomControls from "../components/ZoomControls";
 
 function Home() {
   const [isRotating, setIsRotating] = useState(false);
@@ -25,6 +26,7 @@ function Home() {
             intensity={1}
           />
           <Models isRotating={isRotating} setIsRotating={setIsRotating} />
+          <ZoomControls />
         </Suspense>
       </Canvas>
     </section>
