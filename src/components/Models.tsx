@@ -13,6 +13,7 @@ import {
 import planeScene from "../assets/3d/plane.glb";
 import Bird from "../models/Bird";
 import Island from "../models/Island";
+import Plane from "../models/Plane";
 import Sky from "../models/Sky";
 type PropsType = {
   isRotating: boolean;
@@ -67,7 +68,7 @@ function Models({ isRotating, setIsRotating }: PropsType) {
     }
   };
 
-  // useEffect(() => void (actions["Take 001"].reset().play().paused = true), []);
+  useEffect(() => void (actions["Take 001"].reset().play().paused = true), []);
   const handlePointerDown = (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
@@ -101,11 +102,11 @@ function Models({ isRotating, setIsRotating }: PropsType) {
         skyRef.current.rotation.y += delta * 0.01 * Math.PI * 0.5;
       }
       // Update the reference for the last clientX position
-      // if (planeRef.current) {
-      //   updateSwipteOffset(delta * 0.01 * Math.PI);
-      //   actions["Take 001"].time =
-      //     actions["Take 001"].getClip().duration * swipeOffset.current;
-      // }
+      if (planeRef.current) {
+        updateSwipteOffset(delta * 0.01 * Math.PI);
+        actions["Take 001"].time =
+          actions["Take 001"].getClip().duration * swipeOffset.current;
+      }
       lastX.current = clientX;
       setRotationSpeed(delta * 0.01 * Math.PI);
     }
@@ -135,11 +136,11 @@ function Models({ isRotating, setIsRotating }: PropsType) {
       if (islandRef.current) islandRef.current.rotation.y += rotationSpeed;
       if (skyRef.current) skyRef.current.rotation.y += rotationSpeed * 0.5;
 
-      // if (planeRef.current) {
-      //   updateSwipteOffset(rotationSpeed);
-      //   actions["Take 001"].time =
-      //     actions["Take 001"].getClip().duration * swipeOffset.current;
-      // }
+      if (planeRef.current) {
+        updateSwipteOffset(rotationSpeed);
+        actions["Take 001"].time =
+          actions["Take 001"].getClip().duration * swipeOffset.current;
+      }
     } else {
       const rotation = islandRef.current?.rotation.y;
       /**
@@ -186,7 +187,7 @@ function Models({ isRotating, setIsRotating }: PropsType) {
       <Island islandRef={islandRef} />
       <Sky skyRef={skyRef} />
       <Bird />
-      {/* <Plane planeRef={planeRef} /> */}
+      <Plane planeRef={planeRef} />
     </>
   );
 }
