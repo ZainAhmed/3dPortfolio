@@ -1,41 +1,58 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
+import { Camera } from "three";
 
 function CameraControls() {
   const { camera } = useThree();
-  const previousY = useRef(null);
-  const [clicked, setClicked] = useState(false);
-  // Function to handle scroll events
-  const handleScroll = (event) => {
-    // Adjust camera position based on scroll direction
-    camera.position.z += event.deltaY * 0.1; // You can adjust the speed of zooming by changing the multiplier
-    // Limit how close or far the camera can zoom
-    const minZoom = 10;
-    const maxZoom = 30;
-    camera.position.z = Math.min(Math.max(camera.position.z, minZoom), maxZoom);
-  };
+  const previousY = useRef<number | null>(null); // Specify type for useRef
+  const [clicked, setClicked] = useState<boolean>(false); // Specify type for useState
 
-  const handleMouseMove = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    if (clicked) {
-      if (previousY.current !== null) {
-        const deltaY = event.clientY - previousY.current;
-        camera.position.y += deltaY * 0.01; // Adjust the speed of movement
-      }
-      previousY.current = event.clientY;
+  // Function to handle scroll events
+  const handleScroll = (event: WheelEvent) => {
+    // Specify type for event
+    // Adjust camera position based on scroll direction
+    if (camera instanceof Camera) {
+      // Check if camera is an instance of Camera
+      camera.position.z += event.deltaY * 0.1; // You can adjust the speed of zooming by changing the multiplier
+      // Limit how close or far the camera can zoom
+      const minZoom = 10;
+      const maxZoom = 30;
+      camera.position.z = Math.min(
+        Math.max(camera.position.z, minZoom),
+        maxZoom
+      );
     }
   };
 
-  const handleMouseUp = (event) => {
+  const handleMouseMove = (event: MouseEvent) => {
+    // Specify type for event
+    event.stopPropagation();
+    event.preventDefault();
+    if (clicked && previousY.current !== null) {
+      const deltaY = event.clientY - previousY.current;
+      if (camera instanceof Camera) {
+        // Check if camera is an instance of Camera
+        camera.position.y += deltaY * 0.01; // Adjust the speed of movement
+        // Limit how high or low the camera can move
+        const maxY = 5;
+        const minY = 0;
+        camera.position.y = Math.min(Math.max(camera.position.y, minY), maxY);
+      }
+    }
+    previousY.current = event.clientY;
+  };
+
+  const handleMouseUp = (event: MouseEvent) => {
+    // Specify type for event
     event.stopPropagation();
     event.preventDefault();
     setClicked(false);
     previousY.current = null;
   };
 
-  const handleMouseDown = (event) => {
+  const handleMouseDown = (event: MouseEvent) => {
+    // Specify type for event
     event.stopPropagation();
     event.preventDefault();
     setClicked(true);
@@ -66,7 +83,7 @@ function CameraControls() {
   }, [handleMouseDown, handleMouseMove, handleMouseUp]); // Empty dependency array ensures the effect runs only once
 
   useFrame(() => {
-    if (previousY.current !== null) {
+    if (previousY.current !== null && camera instanceof Camera) {
       // Limit how high or low the camera can move
       const maxY = 5;
       const minY = 0;

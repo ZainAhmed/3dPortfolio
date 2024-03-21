@@ -20,7 +20,6 @@ type PropsType = {
 function Plane({ planeRef }: PropsType) {
   const { scene } = useGLTF(planeScene);
   const [scale, position, rotation] = adjustBiplaneForScreenSize();
-
   return (
     <mesh ref={planeRef}>
       // use the primitive element when you want to directly embed a complex 3D
