@@ -7,6 +7,7 @@ declare module "*.glb" {
 }
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/3dPortfolio/",
   plugins: [react()],
   assetsInclude: ["**/*.glb"],
 });
